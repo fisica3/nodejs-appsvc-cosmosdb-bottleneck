@@ -11,7 +11,7 @@ pool:
 
 variables:
   webAppName: 'demoernestoload'
-  serviceConnection: 'RG_LoadTest01'
+  serviceConnection: 'SC_LoadTestDemo'
   azureSubscriptionId: '89f21b48-2a5e-477c-ac88-c9cbb8401024'
   loadTestResource: 'sample-alt01'
   loadTestResourceGroup: 'RG_LoadTest01'
