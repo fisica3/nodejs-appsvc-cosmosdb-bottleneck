@@ -15,7 +15,7 @@ variables:
   azureSubscriptionId: '89f21b48-2a5e-477c-ac88-c9cbb8401024'
   loadTestResource: 'sample-alt01'
   loadTestResourceGroup: 'RG_LoadTest01'
-  location: 'WEST US'
+  location: 'westus2'
 
 
 stages:
@@ -73,7 +73,6 @@ stages:
           $deploymentOutput= ConvertFrom-Json '$(output)'
           $connectionStringValue= $deploymentOutput.azureCosmosDBAccountKeys.value
           Write-Host "##vso[task.setvariable variable=connectionString;issecret=true;]$connectionStringValue"
-
     - task: AzureAppServiceSettings@1
       inputs:
         azureSubscription: $(serviceConnection)
@@ -102,7 +101,6 @@ stages:
               "slotSetting": false
              }   
           ]
-
     - task: DownloadPipelineArtifact@2
       inputs:
         artifact: drop
