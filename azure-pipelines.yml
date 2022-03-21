@@ -15,7 +15,7 @@ variables:
   azureSubscriptionId: '89f21b48-2a5e-477c-ac88-c9cbb8401024'
   loadTestResource: 'sample-alt01'
   loadTestResourceGroup: 'RG_LoadTest01'
-  location: 'southcentralus'
+  location: 'eastus2'
 
 
 stages:
