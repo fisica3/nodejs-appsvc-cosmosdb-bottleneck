@@ -1,0 +1,62 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  webAppName: 'demoernestoload3'
+  serviceConnection: 'SC_LoadTestDemo'
+  azureSubscriptionId: '89f21b48-2a5e-477c-ac88-c9cbb8401024'
+  loadTestResource: 'sample-alt01'
+  loadTestResourceGroup: 'RG_LoadTest01'
+  location: 'eastus2'
+
+
+stages:
+- stage: LoadTest
+  displayName: Load Test
+  dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+  - job: LoadTest
+    displayName: Load Test
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: $(serviceConnection)
+        subscriptionId: $(azureSubscriptionId)
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: $(loadTestResourceGroup)
+        location: '$(location)'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(System.DefaultWorkingDirectory)/ARMTemplate/template.json'
+        csmParametersFile: '$(System.DefaultWorkingDirectory)/ARMTemplate/parameters.json'
+        overrideParameters: '-name $(loadTestResource) -location "$(location)"'
+        deploymentMode: 'Incremental'    
+    
+    - task: AzureLoadTest@1
+      inputs:
+        azureSubscription: $(serviceConnection)
+        loadTestConfigFile: 'SampleApp.yaml'
+        resourceGroup: $(loadTestResourceGroup)
+        loadTestResource: $(loadTestResource)
+        env: |
+          [
+            {
+            "name": "webapp",
+            "value": "$(webAppName).azurewebsites.net"
+            }
+          ]
+          
+    - publish: $(System.DefaultWorkingDirectory)/loadTest
+      artifact: results
