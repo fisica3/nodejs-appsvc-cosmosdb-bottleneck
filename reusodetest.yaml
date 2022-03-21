@@ -47,7 +47,7 @@ stages:
     - task: AzureLoadTest@1
       inputs:
         azureSubscription: $(serviceConnection)
-        loadTestConfigFile: 'SampleApp.yaml'
+        loadTestConfigFile: 'reusotestdef.yaml'
         resourceGroup: $(loadTestResourceGroup)
         loadTestResource: $(loadTestResource)
         env: |
