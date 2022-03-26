@@ -3,5 +3,5 @@ testPlan: SampleTest2.jmx
 description: 'Test plan reusado'
 engineInstances: 4
 failureCriteria: 
-    - avg(response_time_ms) > 100
+    - avg(response_time_ms) > 15
     - percentage(error) > 40
